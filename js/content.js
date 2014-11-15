@@ -63,6 +63,11 @@ function processCommand(command) {
         console.log('starred');
         document.location.href = "https://mail.google.com/mail/u/0/#starred";
     }
+    
+    else if (command.indexOf('attachments') > -1) {
+        console.log('attachments');
+        document.location.href = "https://mail.google.com/mail/u/0/#search/has%3Aattachment";
+    }
 }
 
 function processLabel(label) {
