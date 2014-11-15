@@ -11,7 +11,7 @@
             "https://mail.google.com/*"
         ],
         "js": [
-            "js/content.js"
+            "js/content.js", "js/jquery-2.1.1.min.js", "js/annyang.min.js"
         ],
         "run_at": "document_start"
     }

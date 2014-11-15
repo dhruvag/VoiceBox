@@ -1,19 +1,14 @@
 window.onload = function () {
-myButton = document.createElement("input");
-myButton.type = "button";
-myButton.value = "Say command";
-placeHolder = document.getElementsByClassName("nH aqK")[0];
-placeHolder.appendChild(myButton);
-
-
-var recognition = new webkitSpeechRecognition();
-var i = 0;
-recognition.continuous = true;
-// recognition.interimResults = false;
-recognition.onresult = function(event) { 
-  console.log(event);
-  // console.log(event["results"][i][0]); // print in JS
-  i++;
-}
-recognition.start();
+    if (annyang) {
+      var commands = {
+        'trash': function() {
+            $('a[href="https://mail.google.com/mail/u/0/#trash"]')[0].click();
+        },
+        'sent': function() {
+            $('a[href="https://mail.google.com/mail/u/0/#sent"]')[0].click();
+        },
+      };
+      annyang.addCommands(commands);
+      annyang.start();
+    }
 }
