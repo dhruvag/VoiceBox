@@ -48,6 +48,21 @@ function processCommand(command) {
         console.log('chats');
         document.location.href = "https://mail.google.com/mail/u/0/#chats";
     }
+    
+    else if (command.indexOf('drafts') > -1) {
+        console.log('drafts');
+        document.location.href = "https://mail.google.com/mail/u/0/#drafts";
+    }
+    
+    else if (command.indexOf('spam') > -1) {
+        console.log('spam');
+        document.location.href = "https://mail.google.com/mail/u/0/#spam";
+    }
+    
+    else if (command.indexOf('starred') > -1) {
+        console.log('starred');
+        document.location.href = "https://mail.google.com/mail/u/0/#starred";
+    }
 }
 
 function processLabel(label) {
