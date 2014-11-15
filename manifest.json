@@ -1,22 +1,13 @@
 {
-  "name": "ViewTeX",
-  "version": "0.2.0",
-  "background": {
+	"manifest_version": 2,
+	"name": "VoiceBox",
+	"version": "0.2.0",
+	"description": "Voice recognition control for your Gmail inbox!",
+
+	"page_action": {},
+	"background": {
     "scripts": ["js/background.js"]
-  },
-  "icons": { "128": "img/icon128.png" },
-  "description": "View LaTeX files (.tex) directly in Chrome™!",
-  "manifest_version": 2,
-  "permissions": ["webRequest", "webRequestBlocking", "http://*/*", "https://*/*"],
-  "content_scripts": [
-    {
-        "matches": [
-            "*://*/*.tex"
-        ],
-        "js": [
-            "js/content.js"
-        ],
-        "run_at": "document_end"
-    }
-    ]
+  	},
+
+	"permissions": ["http://*/*", "https://*/*"]
 }

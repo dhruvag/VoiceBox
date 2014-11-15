@@ -1,0 +1,11 @@
+{
+	"manifest_version": 2,
+	"name": "FILL IN SOON",
+	"version": "1.0",
+
+	"page_action": {
+		"default_icon": "FILL IN FILENAME"
+	},
+
+	"permissions": ["http://www.gmail.com"]
+}
