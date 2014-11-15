@@ -9,6 +9,11 @@ function processCommand(command) {
         $("div[aria-label='Newer']").click();
     }
 
+    else if (command.indexOf('delete') > -1) {
+        console.log('delete');
+        $("div[aria-label='Delete']").click();
+    }
+
     else if (command.indexOf('sent') > -1) {
         console.log('sent');
         $('a[href="https://mail.google.com/mail/u/0/#sent"]')[0].click();
@@ -35,10 +40,15 @@ function processCommand(command) {
     }
 }
 
+function processLabel(label) {
+    document.location.href = "https://mail.google.com/mail/u/0/#label/" + label;
+}
+
 annyang = function() {
     if (annyang) {
       var commands = {
-        'Gmail *command': processCommand,
+        'Gmail label *name': processLabel,
+        'Gmail *command': processCommand
       };
       annyang.addCommands(commands);
       annyang.start();
