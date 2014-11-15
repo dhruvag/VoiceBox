@@ -43,6 +43,11 @@ function processCommand(command) {
         console.log('unread');
         document.location.href = "https://mail.google.com/mail/u/0/#search/label%3Aunread";
     }
+    
+    else if (command.indexOf('chats') > -1) {
+        console.log('chats');
+        document.location.href = "https://mail.google.com/mail/u/0/#chats";
+    }
 }
 
 function processLabel(label) {
