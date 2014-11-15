@@ -38,9 +38,15 @@ function processCommand(command) {
         console.log('trash');
         $('a[href="https://mail.google.com/mail/u/0/#trash"]')[0].click();
     }
+
+    else if (command.indexOf('unread') > -1) {
+        console.log('unread');
+        document.location.href = "https://mail.google.com/mail/u/0/#search/label%3Aunread";
+    }
 }
 
 function processLabel(label) {
+    console.log('label');
     document.location.href = "https://mail.google.com/mail/u/0/#label/" + label;
 }
 
