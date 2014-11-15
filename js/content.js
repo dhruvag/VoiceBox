@@ -10,10 +10,10 @@ webkit = function () {
             $('a[href="https://mail.google.com/mail/u/0/#sent"]')[0].click();      
       } else if (event["results"][i][0].transcript.indexOf("important") > -1) {
             $('a[href="https://mail.google.com/mail/u/0/#imp"]')[0].click();      
-      } 
-      else if (event["results"][i][0].transcript.indexOf("inbox") > -1) {
+      } else if (event["results"][i][0].transcript.indexOf("inbox") > -1) {
             $('a[href="https://mail.google.com/mail/u/0/#inbox"]')[0].click();      
-      } 
+      } else if (event["results"][i][0].transcript.indexOf("compose") > -1) {
+            document.location.href += "?compose=new";
       i++;
     }
     recognition.start();
@@ -30,6 +30,9 @@ annyang = function() {
         },
         'important *': function() {
             $('a[href="https://mail.google.com/mail/u/0/#imp"]')[0].click();
+        },
+        'compose *': function() {
+            document.location.href += "?compose=new";
         }
         'inbox *': function() {
             $('a[href="https://mail.google.com/mail/u/0/#inbox"]')[0].click();
