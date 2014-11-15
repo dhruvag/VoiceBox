@@ -56,6 +56,7 @@ function processCommand(command) {
     else if (command.indexOf('read') > -1) {
         console.log('read');
         document.location.href = "https://mail.google.com/mail/u/0/#search/label%3Aread";
+    }
 
     else if (command.indexOf('chats') > -1) {
         console.log('chats');
