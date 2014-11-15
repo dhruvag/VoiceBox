@@ -11,6 +11,9 @@ webkit = function () {
       } else if (event["results"][i][0].transcript.indexOf("important") > -1) {
             $('a[href="https://mail.google.com/mail/u/0/#imp"]')[0].click();      
       } 
+      else if (event["results"][i][0].transcript.indexOf("inbox") > -1) {
+            $('a[href="https://mail.google.com/mail/u/0/#inbox"]')[0].click();      
+      } 
       i++;
     }
     recognition.start();
@@ -27,6 +30,9 @@ annyang = function() {
         },
         'important *': function() {
             $('a[href="https://mail.google.com/mail/u/0/#imp"]')[0].click();
+        }
+        'inbox *': function() {
+            $('a[href="https://mail.google.com/mail/u/0/#inbox"]')[0].click();
         }
       };
       annyang.addCommands(commands);
