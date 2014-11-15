@@ -95,10 +95,29 @@ function processSearch(term) {
     document.location.href = "https://mail.google.com/mail/u/0/#search/" + term;
 }
 
+function processTemporalSearch(term) {
+    console.log('temporal search');
+    if (term.indexOf('week') > -1) {
+      term = "1w";
+    }
+    else if (term.indexOf('two weeks') > -1) {
+      term = "2w";
+    }
+    else if (term.indexOf('month') > -1) {
+      term = "1m";
+    }
+    else if (term.indexOf('year') > -1) {
+      term = "1y";
+    };
+    document.location.href = 
+    "https://mail.google.com/mail/u/0/#advanced-search/subset=sent&within=" + term + "&sizeoperator=s_sl&sizeunit=s_smb&date=today"
+}
+
 annyang = function() {
     if (annyang) {
       var commands = {
         'Gmail label *name': processLabel,
+        'Gmail search for last *term': processTemporalSearch,
         'Gmail search *term': processSearch,
         'Gmail *command': processCommand
       };
