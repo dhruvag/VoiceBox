@@ -56,6 +56,30 @@ function processCommand(command) {
     else if (command.indexOf('read') > -1) {
         console.log('read');
         document.location.href = "https://mail.google.com/mail/u/0/#search/label%3Aread";
+
+    else if (command.indexOf('chats') > -1) {
+        console.log('chats');
+        document.location.href = "https://mail.google.com/mail/u/0/#chats";
+    }
+    
+    else if (command.indexOf('drafts') > -1) {
+        console.log('drafts');
+        document.location.href = "https://mail.google.com/mail/u/0/#drafts";
+    }
+    
+    else if (command.indexOf('spam') > -1) {
+        console.log('spam');
+        document.location.href = "https://mail.google.com/mail/u/0/#spam";
+    }
+    
+    else if (command.indexOf('starred') > -1) {
+        console.log('starred');
+        document.location.href = "https://mail.google.com/mail/u/0/#starred";
+    }
+    
+    else if (command.indexOf('attachments') > -1) {
+        console.log('attachments');
+        document.location.href = "https://mail.google.com/mail/u/0/#search/has%3Aattachment";
     }
 }
 
@@ -64,10 +88,17 @@ function processLabel(label) {
     document.location.href = "https://mail.google.com/mail/u/0/#label/" + label;
 }
 
+function processSearch(term) {
+    console.log('search');
+    term = term.replace(/\s+/g, '+');
+    document.location.href = "https://mail.google.com/mail/u/0/#search/" + term;
+}
+
 annyang = function() {
     if (annyang) {
       var commands = {
         'Gmail label *name': processLabel,
+        'Gmail search *term': processSearch,
         'Gmail *command': processCommand
       };
       annyang.addCommands(commands);
