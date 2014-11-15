@@ -97,7 +97,10 @@ function processSearch(term) {
 
 function processTemporalSearch(term) {
     console.log('temporal search');
-    if (term.indexOf('week') > -1) {
+    if (term.indexOf('day') > -1) {
+      term = "1d";
+    }
+    else if (term.indexOf('week') > -1) {
       term = "1w";
     }
     else if (term.indexOf('two weeks') > -1) {
