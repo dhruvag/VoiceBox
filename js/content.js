@@ -9,6 +9,11 @@ function processCommand(command) {
         $("div[aria-label='Newer']").click();
     }
 
+    else if (command.indexOf('reply') > -1) {
+        console.log('reply');
+        $("div[aria-label='Reply']").click();
+    }
+
     else if (command.indexOf('delete') > -1) {
         console.log('delete');
         $("div[aria-label='Delete']").click();
@@ -38,10 +43,19 @@ function processCommand(command) {
         console.log('trash');
         $('a[href="https://mail.google.com/mail/u/0/#trash"]')[0].click();
     }
+    else if ((command.indexOf('drafts') > -1) || (command.indexOf('draft') > -1)) {
+        console.log('drafts');
+        $('a[href="https://mail.google.com/mail/u/0/#drafts"]')[0].click();
+    }
 
     else if (command.indexOf('unread') > -1) {
         console.log('unread');
         document.location.href = "https://mail.google.com/mail/u/0/#search/label%3Aunread";
+    }
+
+    else if (command.indexOf('read') > -1) {
+        console.log('read');
+        document.location.href = "https://mail.google.com/mail/u/0/#search/label%3Aread";
     }
 }
 
