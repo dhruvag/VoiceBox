@@ -5,9 +5,17 @@
 	"description": "Voice recognition control for your Gmail inbox!",
 
 	"page_action": {},
-	"background": {
-    "scripts": ["js/background.js"]
-  	},
+  	"content_scripts": [
+    {
+        "matches": [
+            "https://mail.google.com/*"
+        ],
+        "js": [
+            "js/content.js"
+        ],
+        "run_at": "document_start"
+    }
+    ],
 
 	"permissions": ["http://*/*", "https://*/*"]
 }
