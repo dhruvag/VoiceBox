@@ -62,22 +62,22 @@ function processCommand(command) {
         console.log('chats');
         document.location.href = "https://mail.google.com/mail/u/0/#chats";
     }
-    
+
     else if (command.indexOf('drafts') > -1) {
         console.log('drafts');
         document.location.href = "https://mail.google.com/mail/u/0/#drafts";
     }
-    
+
     else if (command.indexOf('spam') > -1) {
         console.log('spam');
         document.location.href = "https://mail.google.com/mail/u/0/#spam";
     }
-    
+
     else if (command.indexOf('starred') > -1) {
         console.log('starred');
         document.location.href = "https://mail.google.com/mail/u/0/#starred";
     }
-    
+
     else if (command.indexOf('attachments') > -1) {
         console.log('attachments');
         document.location.href = "https://mail.google.com/mail/u/0/#search/has%3Aattachment";
@@ -127,7 +127,7 @@ function processCommand(command) {
 				    settings.offset += chunk.length - 1;
 				    speechUtteranceChunker(utt, settings, callback);
 	        	});
-			}	
+			}
 
 		    if (settings.modifier) {
 		        settings.modifier(newUtt);
@@ -161,7 +161,7 @@ function processCommand(command) {
          u.text = longtext;
          // console.log(u);
          // window.speechSynthesis.speak(u);
-         
+
      	speechUtteranceChunker(u, {
 		    chunkLength: 120
 		}, function () {
@@ -171,7 +171,7 @@ function processCommand(command) {
     }
 
     else if (command.indexOf('speak') > -1) {
-   	
+
    	// helper function to parse long text
 	    var speechUtteranceChunker = function (utt, settings, callback) {
 		    settings = settings || {};
@@ -217,7 +217,7 @@ function processCommand(command) {
 		            settings.offset += chunk.length - 1;
 		            speechUtteranceChunker(utt, settings, callback);
 		        });
-			}	
+			}
 
 		    if (settings.modifier) {
 		        settings.modifier(newUtt);
@@ -261,33 +261,98 @@ function processSearch(term) {
     document.location.href = "https://mail.google.com/mail/u/0/#search/" + term;
 }
 
-function processTemporalSearch(term) {
-    console.log('temporal search');
-    if (term.indexOf('day') > -1) {
-      term = "1d";
+function processFilter(term) {
+    console.log('filter');
+    var searchFilters = "";
+    term = term.replace(/\s+/g, "+");
+    term = term.toLowerCase();
+
+    // Ignore the "for" in "Search for ..." commands
+    // Ignore the "in" in "Search in ..." commands
+    term = term.replace(/^for[+]|^4[+]|^in[+]/g, "");
+
+    // Get the label if there is one
+    label = term.split("label+")[1]
+    if (label) {
+        searchFilters += "label%3A" + label + "+";
     }
-    else if (term.indexOf('week') > -1) {
-      term = "1w";
+
+    // Add attachment filter if there is one
+    if (term.indexOf("attachment") > -1) {
+        searchFilters += "has%3Aattachment+";
     }
-    else if (term.indexOf('two weeks') > -1) {
-      term = "2w";
+
+    // Add spam filter if there is one
+    if (term.indexOf("spam") > -1) {
+        searchFilters += "is%3Aspam+";
     }
-    else if (term.indexOf('month') > -1) {
-      term = "1m";
+
+    // Add starred filter if there is one
+    if (term.indexOf("star") > -1) {
+        searchFilters += "is%3Astarred+";
     }
-    else if (term.indexOf('year') > -1) {
-      term = "1y";
-    };
-    document.location.href = 
-    "https://mail.google.com/mail/u/0/#advanced-search/subset=sent&within=" + term + "&sizeoperator=s_sl&sizeunit=s_smb&date=today"
+
+    // Add drafts filter if there is one
+    if (term.indexOf("draft") > -1) {
+        searchFilters += "in%3Adraft+";
+    }
+
+    // Add chats filter if there is one
+    if (term.indexOf("chat") > -1) {
+        searchFilters += "in%3Achats+";
+    }
+
+    // Add read filter if there is one
+    if ((term.indexOf("read") > -1) && (term.indexOf("unread") === -1)) {
+        searchFilters += "is%3Aread+";
+    }
+
+    // Add unread filter if there is one
+    if (term.indexOf("unread") > -1) {
+        searchFilters += "is%3Aunread+";
+    }
+
+    // Add trash filter if there is one
+    if (term.indexOf("trash") > -1) {
+        searchFilters += "in%3Atrash+";
+    }
+
+    // Simple time based filtering
+    var d = new Date();
+    var today = d.getFullYear() + "%2F" + d.getMonth() + "%2F" + d.getDate();
+    var timeInverval = term.match(/(last|past)[+](week|day|month|year)[+]/);
+
+    if (timeInverval) {
+        timeInverval = timeInverval[2];
+        var seconds = d.getTime();
+        if (timeInverval === "day") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24);
+        }
+        else if (timeInverval === "week") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24 * 7);
+        }
+        else if (timeInverval === "month") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24 * 30);
+        }
+        else if (timeInverval === "year") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24 * 365);
+        }
+        var before = b.getFullYear() + "%2F" + b.getMonth() + "%2F" + b.getDate();
+        var phrase = "after%3A" + today + "+" + "before%3A" + before;
+        searchFilters += phrase + "+"
+    }
+
+    if (searchFilters !== "") {
+        document.location.href = "https://mail.google.com/mail/u/0/#search/" + searchFilters;
+    }
 }
 
 annyang = function() {
     if (annyang) {
       var commands = {
         'Gmail label *name': processLabel,
-        'Gmail search for last *term': processTemporalSearch,
-        'Gmail search *term': processSearch,
+        'Gmail search for the phrase *term': processSearch,
+        'Gmail search *term': processFilter,
         'Gmail *command': processCommand
       };
       annyang.addCommands(commands);
