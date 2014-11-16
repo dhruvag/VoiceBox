@@ -43,10 +43,6 @@ function processCommand(command) {
         console.log('trash');
         $('a[href="https://mail.google.com/mail/u/0/#trash"]')[0].click();
     }
-    // else if ((command.indexOf('drafts') > -1) || (command.indexOf('draft') > -1)) {
-    //     console.log('drafts');
-    //     $('a[href="https://mail.google.com/mail/u/0/#drafts"]')[0].click();
-    // }
 
     else if (command.indexOf('unread') > -1) {
         console.log('unread');
@@ -96,6 +92,12 @@ function processLabel(label) {
 }
 
 function processSearch(term) {
+    console.log('search');
+    term = term.replace(/\s+/g, '+');
+    document.location.href = "https://mail.google.com/mail/u/0/#search/" + term;
+}
+
+function processFilter(term) {
     console.log('search');
     var searchFilters = "";
     term = term.replace(/\s+/g, "+");
@@ -176,36 +178,18 @@ function processSearch(term) {
         searchFilters += phrase + "+"
     }
 
-    document.location.href = "https://mail.google.com/mail/u/0/#search/" + searchFilters;
-}
-
-function processTemporalSearch(term) {
-    console.log('temporal search');
-    if (term.indexOf('day') > -1) {
-      term = "1d";
+    if (searchFilters !== "") {
+        document.location.href = "https://mail.google.com/mail/u/0/#search/" + searchFilters;
     }
-    else if (term.indexOf('week') > -1) {
-      term = "1w";
-    }
-    else if (term.indexOf('two weeks') > -1) {
-      term = "2w";
-    }
-    else if (term.indexOf('month') > -1) {
-      term = "1m";
-    }
-    else if (term.indexOf('year') > -1) {
-      term = "1y";
-    };
-    document.location.href =
-    "https://mail.google.com/mail/u/0/#advanced-search/subset=sent&within=" + term + "&sizeoperator=s_sl&sizeunit=s_smb&date=today"
 }
 
 annyang = function() {
     if (annyang) {
       var commands = {
         'Gmail label *name': processLabel,
-        'Gmail search *term': processSearch,
-        'Gmail *command': processCommand
+        'Gmail search for the phrase *term': processSearch,
+        'Gmail search *term': processFilter,
+        'Gmail *command': processCommand,
       };
       annyang.addCommands(commands);
       annyang.start();
