@@ -82,6 +82,16 @@ function processCommand(command) {
         console.log('attachments');
         document.location.href = "https://mail.google.com/mail/u/0/#search/has%3Aattachment";
     }
+    else if (command.indexOf('dictate') > -1) {
+        if ('speechSynthesis' in window) {
+          speechSynthesis.speak(new SpeechSynthesisUtterance('Hello World'));
+          console.log('dictate');
+        // console.log('dictate');
+        // var u = new SpeechSynthesisUtterance();
+        // u.text = $('.a3s').text();
+        // speechSynthesis.speak(u);
+    }
+  }
 }
 
 function processLabel(label) {
