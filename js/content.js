@@ -82,11 +82,11 @@ function processCommand(command) {
         console.log('attachments');
         document.location.href = "https://mail.google.com/mail/u/0/#search/has%3Aattachment";
     }
-    else if (command.indexOf('dictate') > -1) {
+    else if (command.indexOf('speak') > -1) {
         console.log($('.a3s').text());
         var u = new SpeechSynthesisUtterance();
         u.text = $('.a3s').text();
-        speechSynthesis.speak(u);
+        window.speechSynthesis.speak(u);
     }
   }
 
