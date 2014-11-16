@@ -43,10 +43,10 @@ function processCommand(command) {
         console.log('trash');
         $('a[href="https://mail.google.com/mail/u/0/#trash"]')[0].click();
     }
-    else if ((command.indexOf('drafts') > -1) || (command.indexOf('draft') > -1)) {
-        console.log('drafts');
-        $('a[href="https://mail.google.com/mail/u/0/#drafts"]')[0].click();
-    }
+    // else if ((command.indexOf('drafts') > -1) || (command.indexOf('draft') > -1)) {
+    //     console.log('drafts');
+    //     $('a[href="https://mail.google.com/mail/u/0/#drafts"]')[0].click();
+    // }
 
     else if (command.indexOf('unread') > -1) {
         console.log('unread');
@@ -62,22 +62,22 @@ function processCommand(command) {
         console.log('chats');
         document.location.href = "https://mail.google.com/mail/u/0/#chats";
     }
-    
-    else if (command.indexOf('drafts') > -1) {
+
+    else if ((command.indexOf('drafts') > -1) || (command.indexOf('draft') > -1)) {
         console.log('drafts');
         document.location.href = "https://mail.google.com/mail/u/0/#drafts";
     }
-    
+
     else if (command.indexOf('spam') > -1) {
         console.log('spam');
         document.location.href = "https://mail.google.com/mail/u/0/#spam";
     }
-    
+
     else if (command.indexOf('starred') > -1) {
         console.log('starred');
         document.location.href = "https://mail.google.com/mail/u/0/#starred";
     }
-    
+
     else if (command.indexOf('attachments') > -1) {
         console.log('attachments');
         document.location.href = "https://mail.google.com/mail/u/0/#search/has%3Aattachment";
@@ -97,8 +97,86 @@ function processLabel(label) {
 
 function processSearch(term) {
     console.log('search');
-    term = term.replace(/\s+/g, '+');
-    document.location.href = "https://mail.google.com/mail/u/0/#search/" + term;
+    var searchFilters = "";
+    term = term.replace(/\s+/g, "+");
+    term = term.toLowerCase();
+
+    // Ignore the "for" in "Search for ..." commands
+    // Ignore the "in" in "Search in ..." commands
+    term = term.replace(/^for[+]|^4[+]|^in[+]/g, "");
+
+    // Get the label if there is one
+    label = term.split("label+")[1]
+    if (label) {
+        searchFilters += "label%3A" + label + "+";
+    }
+
+    // Add attachment filter if there is one
+    if (term.indexOf("attachment") > -1) {
+        searchFilters += "has%3Aattachment+";
+    }
+
+    // Add spam filter if there is one
+    if (term.indexOf("spam") > -1) {
+        searchFilters += "is%3Aspam+";
+    }
+
+    // Add starred filter if there is one
+    if (term.indexOf("star") > -1) {
+        searchFilters += "is%3Astarred+";
+    }
+
+    // Add drafts filter if there is one
+    if (term.indexOf("draft") > -1) {
+        searchFilters += "in%3Adraft+";
+    }
+
+    // Add chats filter if there is one
+    if (term.indexOf("chat") > -1) {
+        searchFilters += "in%3Achats+";
+    }
+
+    // Add read filter if there is one
+    if ((term.indexOf("read") > -1) && (term.indexOf("unread") === -1)) {
+        searchFilters += "is%3Aread+";
+    }
+
+    // Add unread filter if there is one
+    if (term.indexOf("unread") > -1) {
+        searchFilters += "is%3Aunread+";
+    }
+
+    // Add trash filter if there is one
+    if (term.indexOf("trash") > -1) {
+        searchFilters += "in%3Atrash+";
+    }
+
+    // Simple time based filtering
+    var d = new Date();
+    var today = d.getFullYear() + "%2F" + d.getMonth() + "%2F" + d.getDate();
+    var timeInverval = term.match(/(last|past)[+](week|day|month|year)[+]/);
+
+    if (timeInverval) {
+        timeInverval = timeInverval[2];
+        var seconds = d.getTime();
+        if (timeInverval === "day") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24);
+        }
+        else if (timeInverval === "week") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24 * 7);
+        }
+        else if (timeInverval === "month") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24 * 30);
+        }
+        else if (timeInverval === "year") {
+            var b = new Date(seconds - 1000 * 60 * 60 * 24 * 365);
+        }
+        var before = b.getFullYear() + "%2F" + b.getMonth() + "%2F" + b.getDate();
+        var phrase = "after%3A" + today + "+" + "before%3A" + before;
+        searchFilters += phrase + "+"
+    }
+
+    document.location.href = "https://mail.google.com/mail/u/0/#search/" + searchFilters;
 }
 
 function processTemporalSearch(term) {
@@ -118,7 +196,7 @@ function processTemporalSearch(term) {
     else if (term.indexOf('year') > -1) {
       term = "1y";
     };
-    document.location.href = 
+    document.location.href =
     "https://mail.google.com/mail/u/0/#advanced-search/subset=sent&within=" + term + "&sizeoperator=s_sl&sizeunit=s_smb&date=today"
 }
 
@@ -126,7 +204,6 @@ annyang = function() {
     if (annyang) {
       var commands = {
         'Gmail label *name': processLabel,
-        'Gmail search for last *term': processTemporalSearch,
         'Gmail search *term': processSearch,
         'Gmail *command': processCommand
       };
